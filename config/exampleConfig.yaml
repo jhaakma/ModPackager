@@ -1,8 +1,7 @@
-#Save your config files to ModPackager/config/{modName}.yaml
+# Save your config files to ModPackager/config/{modName}.yaml
 
-#The name of the mod
+# The name of the mod
 mod_name: Test Mod
-
 # (Optional) List of files/folders to copy from Morrowind Directory to repo
 # Relative path is 'Morrowind/Data Files'
 # You may use symlinks for mod files to avoid having to manually copy over,
@@ -12,11 +11,19 @@ contents:
   - MWSE/mods/testmod # or folders
 # (Optional) If set, contents will be replaced with new version number
 version_path: Data Files/MWSE/mods/testmod/version.txt
-
 # Location of Repository
 repo_path: C:/ModReleases/TestMod/master
 # Path and file name of 7z file to be built
 archive_path: C:/ModReleases/TestMod/TestMod.7z
-
 # Install location of Morrowind
 morrowind_path: C:/games/Morrowind
+# Timestamps that need resetting. This is important for ESM/ESP files
+# as Morrowind uses timestamps for load order and git doesn't store
+# timestamp information.
+# Go to https://www.unixtimestamp.com/ to convert the "Modified"
+# time on your ESP file to a UNIX timestamp.
+# You should only have to set this once.
+timestamps:
+  -
+    path: TestMod.esp
+    timestamp: 1499358234
