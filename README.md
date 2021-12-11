@@ -1,13 +1,17 @@
 # Merlord's Morrowind Mod Packager
 
 ## Introduction
-This tool allows you to easily package and release Morrowind mods by running a python script. Multiple mods can be configured by creating a yaml file for each, and passing the file name to the script. You can also integrate with a github action (provided) which will let you pass a version number to the mod packager that will trigger a release on Github.
+This tool allows you to easily package and release Morrowind mods. Multiple mods can be configured for release using a simple yaml file. You can also integrate with a github action (provided) which will let you pass a version number to the mod packager that will trigger a release on Github.
 
+## Features
+- Build local .7z archive of your mod, ready to be released to Nexus etc.
+- Copy files from Morrowind Directory into your repository
+- Commit and push releases to Github
+- Github integration for creating releases in your remote repo
 
 ## Requirements:
 - Python >=3
 - Pip
-
 
 ## Installation
 - Run `ModPackager/build.sh` to install dependencies
