@@ -14,9 +14,9 @@ contents:
 version_path: Data Files/MWSE/mods/testmod/version.txt
 
 # Location of Repository
-master_home: C:/ModReleases/TestMod/master
+repo_path: C:/ModReleases/TestMod/master
 # Path and file name of 7z file to be built
 archive_path: C:/ModReleases/TestMod/TestMod.7z
 
 # Install location of Morrowind
-morrowind_home: C:/games/Morrowind
+morrowind_path: C:/games/Morrowind

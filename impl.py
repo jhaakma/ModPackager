@@ -48,8 +48,8 @@ def copyFiles(config):
 
     logger.info("Copying files from Morrowind to repo")
     for contentPath in config["contents"]:
-        src = f'{config["morrowind_home"]}/Data Files/{contentPath}'
-        dest = f'{config["master_home"]}/Data Files/{contentPath}'
+        src = f'{config["morrowind_path"]}/Data Files/{contentPath}'
+        dest = f'{config["repo_path"]}/Data Files/{contentPath}'
 
         removeExistingFileOrFolder(dest)
         try:
@@ -61,7 +61,7 @@ def copyFiles(config):
 #Updates the configured version.text file
 def updateVersionFile(config, version):
     try:
-        versionFile = config['morrowind_home'] + "/"  + config["version_path"]
+        versionFile = config['morrowind_path'] + "/"  + config["version_path"]
     except:
         print("No version file specified, skipping version update")
         return
@@ -77,7 +77,7 @@ def createRelease(config, version):
     logger.header(f"Creating Release for Version {version}")
     logger.info("Checking out master branch")
     try:
-        repo = Repo(config['master_home'])
+        repo = Repo(config['repo_path'])
     except:
         logger.warn("No repo configured, skipping release")
     repo.heads.master.checkout()
@@ -107,7 +107,7 @@ def createArchive(config):
         logger.info("No archive path specified, skipping archive creation")
         return
     try:
-        repoPath = config["master_home"]
+        repoPath = config["repo_path"]
     except:
         raise Exception("No master home specified")
     try:
