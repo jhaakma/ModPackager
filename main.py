@@ -10,11 +10,11 @@ from config import openConfigFile
 from versionFile import updateVersionFile
 
 try:
-    CONFIG_NAME = sys.argv[1]
+    configName = sys.argv[1]
 except:
     logger.info("Usage: buildmod.py <config name>")
     sys.exit(1)
-config = openConfigFile(CONFIG_NAME)
+config = openConfigFile(configName)
 
 hasVersion = len(sys.argv) > 2
 if hasVersion:
