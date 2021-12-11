@@ -6,7 +6,7 @@ from createArchive import createArchive
 from createRelease import createRelease
 from syncTimestamp import syncTimestampOverrideFile
 from copyFiles import copyFiles
-from config import openConfigFile
+from openConfigFile import openConfigFile
 from versionFile import updateVersionFile
 
 try:
