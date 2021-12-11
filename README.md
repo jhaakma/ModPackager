@@ -3,14 +3,17 @@
 ## Introduction
 This tool allows you to easily package and release Morrowind mods by running a python script. Multiple mods can be configured by creating a yaml file for each, and passing the file name to the script. You can also integrate with a github action (provided) which will let you pass a version number to the mod packager that will trigger a release on Github.
 
+
 ## Requirements:
 - Python >=3
 - Pip
+
 
 ## Installation
 - Run `ModPackager/build.sh` to install dependencies
 - For each mod, add a yaml file in the `ModPackager/config/` (see Mod Config File section)
 - Add the github action file to your mod repos (see below)
+
 
 ## Mod Config File
 Each mod needs a config file to determine paths to files etc. Here is an example:
@@ -50,16 +53,19 @@ This is the path where the 7z archive file will be created locally. If not set, 
 #### morrowind_path
 This is the path to the Morrowind installation folder. This is required if you are updating the version.txt file or are copying files using the `contents` field.
 
+
 ## Github Integration
 The action file in `GitHubAction/main.yml` will trigger when a commit is pushed with a tag starting with 'v'.
 It will create a new release for that version and bundle it into a 7z file
 
+### Steps to configure Github Action
 - Copy `GitHubAction/.github/workflows/main.yml` to your repo at `{repo}/.github/workflows/main.yml`
 - In `main.yml`, set env.ARCHIVE_NAME to the name of your mod
 - Commit and push the `main.yml` file
 - When using Mod Packager, pass a version number as a second argument to trigger a release
 
     e.g. `ModPackager/run.sh myMod v1.0.0`
+
 
 ## Usage
 
