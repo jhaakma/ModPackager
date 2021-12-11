@@ -24,6 +24,6 @@ def resetTimestamps(config):
             logger.warn("Invalid timestamp data, skipping")
             continue
 
-        fullpath = Path(masterpath + "/Data Files/" + filepath)
+        fullpath = Path(os.path.join(masterpath, "Data Files", filepath))
         setTimeStamp(fullpath, timestamp)
         logger.info(f"Successfully Reset timestamp for {filepath} to {timestamp}")

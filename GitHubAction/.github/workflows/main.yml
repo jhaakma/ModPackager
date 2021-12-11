@@ -50,7 +50,7 @@ jobs:
                   timestamp = fileData.get("timestamp")
                   if not filepath or not timestamp:
                       continue
-                  fullpath = Path("Data Files/" + filepath)
+                  fullpath = Path(os.path.join("Data Files", filepath))
                   print(f"Resetting timestamp for {fullpath} to {timestamp}")
                   setTimeStamp(fullpath, timestamp)
           timestampOverrides = openConfigFile("timestampOverrides.yaml")
