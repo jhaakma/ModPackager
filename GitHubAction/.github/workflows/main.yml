@@ -1,3 +1,11 @@
+# This GitHub Action triggers when a commit is pushed with a tag starting with 'v'
+#   It will create a new release for that version and bundle it into a 7z file
+#
+# Step 1: set env.ARCHIVE_NAME to the name of your mod.
+# Step 2: Commit this file in your repo at .github/workflows/main.yml
+#   (or create it in github via the Actions tab)
+# Step 3: Use the ModPackager, passing it a version number (e.g 'v1.0.3') to create a release
+#   This will trigger the action and create a new Release in Github
 name: Package Mod
 on:
   push:
@@ -7,12 +15,48 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ARCHIVE_NAME: CHANGE_ME
+      ARCHIVE_NAME: CHANGE_THIS_VALUE
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
           fetch-depth: 50
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+
+      - name: Reset Timestamp of ESP file
+        run: |
+          from datetime import datetime
+          import yaml
+          import time
+          import os
+          from pathlib import Path
+          def openConfigFile(configPath):
+              with open(configPath, 'r') as stream:
+                  try:
+                      config = yaml.safe_load(stream)
+                  except:
+                      return None
+                  return config
+          def setTimeStamp(filepath, timestamp):
+              os.utime(filepath, (timestamp, timestamp))
+          def resetTimestamps(overrides):
+              if not overrides:
+                  return
+              for fileData in overrides:
+                  filepath = fileData.get("path")
+                  timestamp = fileData.get("timestamp")
+                  if not filepath or not timestamp:
+                      continue
+                  fullpath = Path("Data Files/" + filepath)
+                  print(f"Resetting timestamp for {fullpath} to {timestamp}")
+                  setTimeStamp(fullpath, timestamp)
+          timestampOverrides = openConfigFile("timestampOverrides.yaml")
+          if timestampOverrides:
+              resetTimestamps(timestampOverrides)
+        shell: python
 
       - name: Build Project
         uses: edgarrc/action-7z@v1
