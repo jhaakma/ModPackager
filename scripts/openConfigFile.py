@@ -1,7 +1,7 @@
-import pathlib, logger, yaml
+import pathlib, logger, yaml, os
 #Fetches the configs from the specified file
 def openConfigFile(configName):
-    configPath = str(pathlib.Path(__file__).parent.resolve()) + '\\config\\' + configName + '.yaml'
+    configPath = os.path.join( str(pathlib.Path(__file__).parent.parent.resolve()), 'config', configName + '.yaml')
     with open(configPath, 'r') as stream:
         try:
             config = yaml.safe_load(stream)
