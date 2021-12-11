@@ -1,14 +1,20 @@
 #!/usr/bin/python
 import sys
-import impl
 import logger
+from resetTimestamp import resetTimestamps
+from createArchive import createArchive
+from createRelease import createRelease
+from syncTimestamp import syncTimestampOverrideFile
+from copyFiles import copyFiles
+from config import openConfigFile
+from versionFile import updateVersionFile
 
 try:
     CONFIG_NAME = sys.argv[1]
 except:
     logger.info("Usage: buildmod.py <config name>")
     sys.exit(1)
-config = impl.openConfigFile(CONFIG_NAME)
+config = openConfigFile(CONFIG_NAME)
 
 hasVersion = len(sys.argv) > 2
 if hasVersion:
@@ -16,11 +22,14 @@ if hasVersion:
     logger.info(f"Version: {version}")
 
 if hasVersion:
-    impl.updateVersionFile(config, version)
+    updateVersionFile(config, version)
 
 logger.header(f"Starting Build for {config['mod_name']}")
-impl.copyFiles(config)
+copyFiles(config)
+resetTimestamps(config)
+syncTimestampOverrideFile(config)
 
 if hasVersion:
-    impl.createRelease(config, version)
-impl.createArchive(config)
+    createRelease(config, version)
+
+createArchive(config)

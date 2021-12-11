@@ -16,7 +16,7 @@ This tool allows you to easily package and release Morrowind mods. Multiple mods
 ## Installation
 - Run `ModPackager/build.sh` to install dependencies
 - For each mod, add a yaml file in the `ModPackager/config/` (see Mod Config File section)
-- Add the github action file to your mod repos (see below)
+- Add the github action file to your mod repos (see Github Integration section)
 
 
 ## Mod Config File
