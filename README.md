@@ -10,7 +10,6 @@ This tool allows you to easily package and release Morrowind mods by running a p
 ## Installation
 - Run `ModPackager/build.sh` to install dependencies
 - For each mod, add a yaml file in the `ModPackager/config/` (see Mod Config File section)
-
 - Add the github action file to your mod repos (see below)
 
 ## Mod Config File
@@ -61,30 +60,46 @@ It will create a new release for that version and bundle it into a 7z file
     e.g. `ModPackager/run.sh myMod v1.0.0`
 
 ## Usage
-- Install the mod packager (see the `Installation` section)
-- To create a local build, simply navigate to the ModPackager folder and call `run.sh`, passing it the name of a mod config file. E.g:
-    ```
-        cd C:/Tools/ModPackager
-        ./run.sh testmod
-    ```
-    Output:
-    ```
-        Starting Build for Test Mod
-        Copying files from Morrowind to repo
-        Removed file at C:/mods/testMod/Data Files/TestMod.esp
-        Copied file from 'C:/games/Morrowind/Morrowind/Data Files/TestMod.esp' to 'C:/mods/testMod/Data Files/TestMod.esp
-        Removed folder at C:/mods/testMod/Data Files/MWSE/mods/mer/testmod
-        Copied folder from 'C:/games/Morrowind/Morrowind/Data Files/MWSE/mods/mer/testmod' to 'C:/mods/testMod/Data Files/MWSE/mods/mer/testmod
-        Copy successful
-        Creating 7z file
-        Archive created successfully at 'C:/mods/testMod/TestMod.7z'
-    ```
 
-- It is recommended you create an alias to run.sh in your `~/.bash_profile`, e.g:
-    ```
+### Local Build
+To create a local build, simply navigate to the ModPackager folder and call `run.sh`, passing it the name of a mod config file. E.g:
+
+```
+cd C:/Tools/ModPackager
+./run.sh testmod
+```
+
+This will do the following:
+- Copy any files/folders defined in `config.contents` from your Morrowind install directory into your repo directory
+- Add the `Data Files` folder from your repo to a .7z file if `config.repo_path` is set
+
+### Github Release
+To push a new release to Github, pass a version number as a second argument. The version must start with a `v`, e.g:
+
+```
+cd C:/Tools/ModPackager
+./run.sh testmod v1.0.1
+```
+
+This will do the following:
+    - Updates the version.txt file if configured
+    - Does a git pull
+    - Adds and commits any local changes
+    - Creates a tag based on the version number
+    - Pushes the tag and the commit to github
+    - If the workflow action is set up in your remote repo, it will be triggered by the tag and create a release on Github
+
+### Set up Alias
+It is recommended you create an alias to run.sh in your `~/.bash_profile`, e.g:
+```
     # open bash_profile:
     vim ~/.bash_profile
 
     # add the following line (change path to wherever you installed Mod Packager)
     alias packagemod='C:/Tools/ModPackager/run.sh`
-    ```
+```
+
+You can then run a build from anywhere by calling the packagemod alias, e.g
+```
+packagemod myMod v1.0.7
+```
