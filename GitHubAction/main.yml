@@ -1,0 +1,43 @@
+# This GitHub Action triggers when a commit is pushed with a tag starting with 'v'
+#   It will create a new release for that version and bundle it into a 7z file
+#
+# Step 1: set env.ARCHIVE_NAME to the name of your mod.
+# Step 2: Commit this file in your repo at .github/workflows/main.yml
+#   (or create it in github via the Actions tab)
+# Step 3: Use the ModPackager, passing it a version number (e.g 'v1.0.3') to create a release
+#   This will trigger the action and create a new Release in Github
+name: Package Mod
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ARCHIVE_NAME: CHANGE_ME
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 50
+
+      - name: Build Project
+        uses: edgarrc/action-7z@v1
+        with:
+          args: 7z a  ${{env.ARCHIVE_NAME}}.7z "Data Files"
+
+      - name: Create Release
+        uses: notlmn/release-with-changelog@v2
+        with:
+          header: '### Changelog'
+          include-hash: true
+          include-range: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Github
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: ${{env.ARCHIVE_NAME}}.7z
