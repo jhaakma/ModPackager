@@ -34,6 +34,10 @@ Each mod needs a config file to determine paths to files etc. Here is an example
     repo_path: C:/ModReleases/TestMod/master
     archive_path: C:/ModReleases/TestMod/TestMod.7z
     morrowind_path: C:/games/Morrowind
+    timestamps:
+        -
+            path: TestMod.esp
+            timestamp: 1499358234
 ```
 ### Config Values
 
@@ -56,6 +60,11 @@ This is the path where the 7z archive file will be created locally. If not set, 
 
 #### morrowind_path
 This is the path to the Morrowind installation folder. This is required if you are updating the version.txt file or are copying files using the `contents` field.
+
+### timestamps (Optional)
+A list of files that need their timestamps reset. This is important for ESM/ESP files as Morrowind uses timestamps for load order and git doesn't store timestamp information. Go to https://www.unixtimestamp.com/ to convert the "Modified" time on your ESP file to a UNIX timestamp.
+
+You should only have to set this once.
 
 
 ## Github Integration
