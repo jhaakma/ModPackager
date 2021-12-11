@@ -10,10 +10,10 @@ def syncTimestampOverrideFile(config):
     if not timestamps:
         logger.info("No timestamp override specified, skipping timestamp sync")
         return
-    logger.header("Syncing timestamp override file")
+    logger.header("Creating timestamp override file")
     try:
         with open(repoPath + "/timestampOverrides.yaml", "w") as f:
             f.write(yaml.dump(timestamps))
-            logger.success("Timestamp override file created successfully")
+            logger.success(f"Timestamp override file created successfully at '{repoPath}/timestampOverrides.yaml'")
     except Exception as e:
         logger.error(f"Failed to write timestamp override file. Exception: {e}")

@@ -8,7 +8,7 @@ def setTimeStamp(filepath, timestamp):
     os.utime(filepath, (timestamp, timestamp))
 
 def resetTimestamps(config):
-    logger.info("Resetting timestamps...")
+    logger.header("Resetting timestamps")
     timestamps = config.get("timestamps")
     if not timestamps:
         logger.warn("No timestamps found, skipping reset")
@@ -26,4 +26,4 @@ def resetTimestamps(config):
 
         fullpath = Path(os.path.join(masterpath, "Data Files", filepath))
         setTimeStamp(fullpath, timestamp)
-        logger.info(f"Successfully Reset timestamp for {filepath} to {timestamp}")
+        logger.success(f"Successfully Reset timestamp for {filepath} to {timestamp}")
