@@ -103,12 +103,12 @@ cd C:/Tools/ModPackager
 ```
 
 This will do the following:
-    - Updates the version.txt file if configured
-    - Does a git pull
-    - Adds and commits any local changes
-    - Creates a tag based on the version number
-    - Pushes the tag and the commit to github
-    - If the workflow action is set up in your remote repo, it will be triggered by the tag and create a release on Github
+- Update the version.txt file if configured
+- git pull
+- Add and commit any local changes
+- Create a tag based on the version number
+- Push the tag and the commit to github
+- If the workflow action is set up in your remote repo, it will be triggered by the tag and create a release on Github
 
 ### Set up Alias
 It is recommended you create an alias to run.sh in your `~/.bash_profile`, e.g:
