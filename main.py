@@ -12,7 +12,7 @@ from versionFile import updateVersionFile
 try:
     configName = sys.argv[1]
 except:
-    logger.info("Usage: buildmod.py <config name>")
+    logger.info("Usage: buildmod.py <config name> <?version>")
     sys.exit(1)
 config = openConfigFile(configName)
 
