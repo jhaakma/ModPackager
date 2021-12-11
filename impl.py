@@ -58,25 +58,6 @@ def copyFiles(config):
             logger.error(f"Failed to copy file from {contentPath}. Exception: {e}")
     logger.success("Copy successful")
 
-#Add data files to archive
-def createArchive(config):
-    logger.header("Creating 7z file")
-    try:
-        archivePath = config["archive_path"]
-    except:
-        logger.info("No archive path specified, skipping archive creation")
-        return
-    try:
-        repoPath = config["master_home"]
-    except:
-        raise Exception("No master home specified")
-    try:
-        with py7zr.SevenZipFile(archivePath, 'w') as archive:
-            archive.writeall(f"{repoPath}/Data Files", "Data Files")
-        logger.success(f"Archive created successfully at {archivePath}")
-    except Exception as e:
-        logger.error(f"Failed to create archive. Exception: {e}")
-
 #Updates the configured version.text file
 def updateVersionFile(config, version):
     try:
@@ -116,3 +97,22 @@ def createRelease(config, version):
     origin.push(tags=True)
     origin.push()
     logger.success("Release created successfully")
+
+    #Add data files to archive
+def createArchive(config):
+    logger.header("Creating 7z file")
+    try:
+        archivePath = config["archive_path"]
+    except:
+        logger.info("No archive path specified, skipping archive creation")
+        return
+    try:
+        repoPath = config["master_home"]
+    except:
+        raise Exception("No master home specified")
+    try:
+        with py7zr.SevenZipFile(archivePath, 'w') as archive:
+            archive.writeall(f"{repoPath}/Data Files", "Data Files")
+        logger.success(f"Archive created successfully at '{archivePath}'")
+    except Exception as e:
+        logger.error(f"Failed to create archive. Exception: {e}")
