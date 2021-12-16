@@ -1,21 +1,22 @@
-# This GitHub Action triggers when a commit is pushed with a tag starting with 'v'
-#   It will create a new release for that version and bundle it into a 7z file
-#
-# Step 1: set env.ARCHIVE_NAME to the name of your mod.
-# Step 2: Commit this file in your repo at .github/workflows/main.yml
-#   (or create it in github via the Actions tab)
-# Step 3: Use the ModPackager, passing it a version number (e.g 'v1.0.3') to create a release
-#   This will trigger the action and create a new Release in Github
 name: Package Mod
 on:
   push:
     tags:
       - 'v*'
+env:
+  ARCHIVE_NAME: Archive
+  MOD_ID: "45453"
+
+  #Only set these if you have followed the steps for Nexus Upload
+  # FILE_NAME: Test Mod
+  # FILE_CATEGORY: Main Files
+  # NEW_EXISTING_VERSION: false
+  # REMOVE_OLD_VERSION: false
+  # FILE_DESCRIPTION: "Changelog: https://github.com/jhaakma/TestMod/releases"
+  # REQUIREMENTS_POP_UP: true
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      ARCHIVE_NAME: CHANGE_THIS_VALUE
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -29,12 +30,15 @@ jobs:
           import os
           from pathlib import Path
           def openConfigFile(configPath):
-              with open(configPath, 'r') as stream:
-                  try:
-                      config = yaml.safe_load(stream)
-                  except:
-                      return None
-                  return config
+              try:
+                  with open(configPath, 'r') as stream:
+                      try:
+                          config = yaml.safe_load(stream)
+                      except:
+                          return None
+                      return config
+              except:
+                  print("No timestamps override found, skipping")
           def setTimeStamp(filepath, timestamp):
               os.utime(filepath, (timestamp, timestamp))
           def resetTimestamps(overrides):
@@ -52,12 +56,10 @@ jobs:
           if timestampOverrides:
               resetTimestamps(timestampOverrides)
         shell: python
-
       - name: Build Project
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a  ${{env.ARCHIVE_NAME}}.7z "Data Files"
-
+          args: 7z a ${{env.ARCHIVE_NAME}}.7z "Data Files"
       - name: Create Release
         uses: notlmn/release-with-changelog@v2
         with:
@@ -65,10 +67,29 @@ jobs:
           include-hash: true
           include-range: true
           token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload to Github
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: ${{env.ARCHIVE_NAME}}.7z
+      - name: Deploy to Nexus
+        uses: greatness7/nexusmods_file_updater@v2
+        if: ${{ env.MOD_ID != null }}
+        with:
+          username: ${{secrets.NEXUS_USERNAME}}
+          password: ${{secrets.NEXUS_PASSWORD}}
+          game_domain_name: "morrowind"
+          mod_id: ${{env.MOD_ID}}
+          file_name: ${{env.FILE_NAME}}
+          file_version: ${{github.ref_name}}
+          update_version: true
+          file_category: ${{env.FILE_CATEGORY}}
+          new_existing_version: ${{env.NEW_EXISTING_VERSION}}
+          original_file: ".*"
+          remove_old_version: ${{env.REMOVE_OLD_VERSION}}
+          file_description: ${{env.FILE_DESCRIPTION}}
+          remove_nmm_button: false
+          set_as_main_nmm: false
+          requirements_pop_up: ${{env.REQUIREMENTS_POP_UP}}
+          file_path: "${{env.ARCHIVE_NAME}}.7z"

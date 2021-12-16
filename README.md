@@ -111,6 +111,55 @@ This will do the following:
 - Push the tag and the commit to github
 - If the workflow action is set up in your remote repo, it will be triggered by the tag and create a release on Github
 
+### Nexus Release
+To have the Github workflow deploy your mod to Nexus automatically, a couple of extra steps are needed.
+
+### Add Environment Variables
+
+Firstly add the following to the `env` section of your workflow:
+```
+example:
+  MOD_ID: "99999"
+  FILE_NAME: Test Mod
+  FILE_CATEGORY: "Main Files"
+  NEW_EXISTING_VERSION: false
+  REMOVE_OLD_VERSION: false
+  FILE_DESCRIPTION: "Changelog: https://github.com/jhaakma/TestMod/releases"
+  REQUIREMENTS_POP_UP: true
+```
+
+##### `MOD_ID`
+This is the number that appears in the URL of your mod page in Nexus. Setting this value will also cause the Nexus Upload workflow step to trigger when you run a build.
+
+##### `FILE_NAME`
+The name of the file to be uploaded.
+
+##### `FILE_CATEGORY`
+The category for the file, "Main Files" is the default.
+
+##### `NEW_EXISTING_VERSION`
+Whether the uploaded file is an update of an existing file.
+
+##### `REMOVE_OLD_VERSION`
+If NEW_EXISTING_VERSION is set, determines whether the previous file should be archived.
+
+##### `FILE_DESCRIPTION`
+The description of the file. 255 characters max. Recommend providing a link to the releases page on your github, as the workflow will create changelogs and display them there.
+
+##### `REQUIREMENTS_POP_UP`
+Whether the user will get the requirements popn up when downloading the file.
+
+#### Add Repository Secrets
+Secondly, you need to add two secrets to your mod's Github repository to allow the workflow to log in and upload the file for you. Github secrets are encrypted and designed to store sensitive data. They are not accessible outside of the workflow in which they are used.
+
+From your repo, navigate to Settings->Secrets and click "New Repository Secret" to add a new secret.
+
+##### `NEXUS_USERNAME`
+This is your username to log into Nexus.
+
+##### `NEXUS_PASSWORD`
+This is your Nexus password.
+
 ### Set up Alias
 It is recommended you create an alias to run.sh in your `~/.bash_profile`, e.g:
 ```
