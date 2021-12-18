@@ -19,6 +19,8 @@ config = openConfigFile(configName)
 hasVersion = len(sys.argv) > 2
 if hasVersion:
     version = sys.argv[2]
+    if not version.startswith("v"):
+        version = "v" + version
     logger.info(f"Version: {version}")
 
 if hasVersion:
