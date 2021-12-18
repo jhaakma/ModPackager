@@ -5,9 +5,8 @@ on:
       - 'v*'
 env:
   ARCHIVE_NAME: Archive
-  MOD_ID: "45453"
-
   #Only set these if you have followed the steps for Nexus Upload
+  # MOD_ID: "45453"
   # FILE_NAME: Test Mod
   # FILE_CATEGORY: Main Files
   # NEW_EXISTING_VERSION: false
