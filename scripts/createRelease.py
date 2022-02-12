@@ -2,7 +2,6 @@ import logger
 from git import Repo
 #Commit changes to git, set release tag and push to remote
 def createRelease(config, version):
-    logger.header(f"Creating Release for Version {version}")
     logger.info("Checking out master branch")
     try:
         repo = Repo(config['repo_path'])

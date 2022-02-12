@@ -1,37 +1,53 @@
 #!/usr/bin/python
-import sys
 import logger
+import argparse
 from resetTimestamp import resetTimestamps
 from createArchive import createArchive
 from createRelease import createRelease
 from syncTimestamp import syncTimestampOverrideFile
 from copyFiles import copyFiles
 from openConfigFile import openConfigFile
-from versionFile import updateVersionFile
+from versionFile import updateVersionFile, appendVersionPrefix
 
-try:
-    configName = sys.argv[1]
-except:
-    logger.info("Usage: buildmod.py <config name> <?version>")
-    sys.exit(1)
-config = openConfigFile(configName)
+# Parse the arguments
+parser = argparse.ArgumentParser(description = "Create a release of the project")
 
-hasVersion = len(sys.argv) > 2
-if hasVersion:
-    version = sys.argv[2]
-    if not version.startswith("v"):
-        version = "v" + version
-    logger.info(f"Version: {version}")
+subparser = parser.add_subparsers(dest = "command")
+sync = subparser.add_parser("sync", help = "sync files from source")
+build = subparser.add_parser("build", help = "build the project")
+release = subparser.add_parser("release", help = "create a release")
 
-if hasVersion:
-    updateVersionFile(config, version)
+parser.add_argument("name", help="name of the mod to package")
+release.add_argument("version", help = "the version to release")
 
-logger.header(f"Starting Build for {config['mod_name']}")
-copyFiles(config)
-resetTimestamps(config)
-syncTimestampOverrideFile(config)
+args = parser.parse_args()
 
-if hasVersion:
+def sync(config):
+    logger.header(f"Syncing files for {config['mod_name']}")
+    copyFiles(config)
+
+def build(config):
+    logger.header(f"Building {config['mod_name']}")
+    resetTimestamps(config)
+    syncTimestampOverrideFile(config)
+    createArchive(config)
+
+def release(config, version):
+    logger.header(f"Creating release {args.version} for {config['mod_name']}")
     createRelease(config, version)
 
-createArchive(config)
+
+config = openConfigFile(args.name)
+if args.command == 'sync':
+    sync(config)
+
+if args.command == 'build':
+    sync(config)
+    build(config)
+
+if args.command == 'release':
+    appendVersionPrefix(args.version)
+    updateVersionFile(config, args.version)
+    sync(config)
+    build(config)
+    release(config, args.version)

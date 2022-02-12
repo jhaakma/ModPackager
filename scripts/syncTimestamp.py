@@ -10,7 +10,7 @@ def syncTimestampOverrideFile(config):
     if not timestamps:
         logger.info("No timestamp override specified, skipping timestamp sync")
         return
-    logger.header("Creating timestamp override file")
+    logger.info("Creating timestamp override file")
     try:
         with open(repoPath + "/timestampOverrides.yaml", "w") as f:
             f.write(yaml.dump(timestamps))

@@ -14,5 +14,7 @@ def updateVersionFile(config, version):
     except Exception as e:
         logger.error(f"Failed to update version file. Exception: {e}")
 
-
-
+#Ensures that the version number starts with a 'v', which is required to trigger the release workflow opn Github
+def appendVersionPrefix(version):
+    if not version.startswith("v"):
+        version = "v" + version
